@@ -3,6 +3,8 @@ import sys
 import argparse
 
 def main(args):
+    os.unsetenv['https_proxy']
+    os.unsetenv['http_proxy']
     del os.environ['https_proxy']
     del os.environ['http_proxy']
     cmd = ['aws',
