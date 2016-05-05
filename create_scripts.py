@@ -1,4 +1,4 @@
-import status_postgres
+import postgres
 import argparse
 import os
 
