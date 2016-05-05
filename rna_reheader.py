@@ -18,6 +18,15 @@ def main(args):
            'PL',
            '-',
            '|',
+           'aws',
+           '--profile',
+           'cleversafe',
+           '--endpoint',
+           'http://gdc-accessors.osdc.io',
+           's3',
+           'cp',
+           '- '+str(args.output_location),
+           '|',
            'java',
            '-jar',
            '-Xmx2G '+str(args.picard),
@@ -34,16 +43,7 @@ def main(args):
            '|',
            'md5sum',
            '-',
-           '> '+str(args.gdc_id)+'_md5.txt',
-           '|',
-           'aws',
-           '--profile',
-           'cleversafe',
-           '--endpoint',
-           'http://gdc-accessors.osdc.io',
-           's3',
-           'cp',
-           '- '+str(args.output_location)]
+           '> '+str(args.gdc_id)+'_md5.txt']
     shell_cmd = ' '.join(cmd)
     os.system(shell_cmd)
 
