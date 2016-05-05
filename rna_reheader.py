@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+import subprocess
 
 def main(args):
     cmd = ['aws',
@@ -18,34 +19,41 @@ def main(args):
            'PL',
            '-',
            '|',
-           'aws',
+           'tee',
+           '>(aws',
            '--profile',
            'cleversafe',
            '--endpoint',
            'http://gdc-accessors.osdc.io',
            's3',
            'cp',
-           '- '+str(args.output_location),
-           '|',
-           'java',
+           '- '+str(args.output_location)+')',
+           '>(java',
            '-jar',
            '-Xmx2G '+str(args.picard),
            'ValidateSamFile',
            'I=/dev/stdin',
-           'O='+str(args.gdc_id)+'.validate',
-           '|',
-           'java',
+           'O='+str(args.gdc_id)+'.validate)',
+           '>(java',
            '-jar',
            '-Xmx2G '+str(args.picard),
            'BuildBamIndex',
            'I=/dev/stdin',
-           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai'
-           '|',
-           'md5sum',
+           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai)',
+           '>(md5sum',
            '-',
-           '> '+str(args.gdc_id)+'_md5.txt']
+           '> '+str(args.gdc_id)+'_md5.txt)']
     shell_cmd = ' '.join(cmd)
-    os.system(shell_cmd)
+    subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
+    outdir = os.path.dirname(args.output_location)
+    upload = ['aws',
+              '--profile',
+              'cleversafe',
+              '--endpoint',
+              'http://gdc-accessors.osdc.io',
+              's3',
+              'cp '+str(args.gdc_id)+'* '+outdir,
+              '--recursive']
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
