@@ -42,7 +42,9 @@ def main(args):
            '>(md5sum',
            '-',
            '> '+str(args.gdc_id)+'_md5.txt)',
-           '>/dev/null']
+           '>/dev/null',
+           '|',
+           '> '+str(args.gdc_id)+'.log']
     shell_cmd = ' '.join(cmd)
     subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
     outdir = os.path.dirname(args.output_location)
