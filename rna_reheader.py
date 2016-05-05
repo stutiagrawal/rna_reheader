@@ -54,6 +54,8 @@ def main(args):
               's3',
               'cp '+str(args.gdc_id)+'* '+outdir,
               '--recursive']
+    shell_upload = ' '.join(upload)
+    subprocess.call(shell_upload, shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
