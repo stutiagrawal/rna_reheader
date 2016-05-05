@@ -37,6 +37,7 @@ def main(args):
            'md5sum',
            '-',
            '> '+str(args.gdc_id)+'_md5.txt',
+           '|',
            'aws',
            '--profile',
            'cleversafe',
@@ -46,24 +47,29 @@ def main(args):
            'cp',
            '- '+str(args.output_location)]
     shell_cmd = ' '.join(cmd)
-    print shell_cmd
+    os.system(shell_cmd)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--input_location',
+        required=True,
         help='input_location',
     )
     parser.add_argument('--output_location',
+        required=True,
         help='output_location',
     )
     parser.add_argument('--gdc_id',
+        required=True,
         help='gdc_id',
     )
     parser.add_argument('--picard',
+        required=True,
         help='picard jar file path',
     )
     parser.add_argument('--fixit',
+        required=True,
         help='picard jar file path',
     )
     args = parser.parse_args()
