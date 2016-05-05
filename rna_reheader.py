@@ -13,10 +13,9 @@ def main(args):
            'cp '+str(args.input_location),
            '-',
            '| '+str(args.fixit),
-           '--sm',
-           'SM',
+           '--sm '+str(args.barcode),
            '--pl',
-           'PL',
+           'ILLUMINA',
            '-',
            '|',
            'tee',
@@ -69,6 +68,10 @@ if __name__ == '__main__':
     parser.add_argument('--gdc_id',
         required=True,
         help='gdc_id',
+    )
+    parser.add_argument('--barcode',
+        required=True,
+        help='barcode',
     )
     parser.add_argument('--picard',
         required=True,
