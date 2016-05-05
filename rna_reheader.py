@@ -11,9 +11,9 @@ def main(args):
            '--endpoint',
            'http://gdc-accessors.osdc.io',
            's3',
-           'cp '+args.input_location,
+           'cp '+str(args.input_location),
            '-',
-           '| '+args.fixit,
+           '| '+str(args.fixit),
            '--sm',
            'SM',
            '--pl',
@@ -22,21 +22,21 @@ def main(args):
            '|',
            'java',
            '-jar',
-           '-Xmx2G '+args.picard,
+           '-Xmx2G '+str(args.picard),
            'ValidateSamFile',
            'I=/dev/stdout',
-           'O='+args.gdc_id+'.validate',
+           'O='+str(args.gdc_id)+'.validate',
            '|',
            'java',
            '-jar',
-           '-Xmx2G '+args.picard,
+           '-Xmx2G '+str(args.picard),
            'BuildBamIndex',
            'I=/dev/stdout',
-           'O='+args.gdc_id+'_gdc_realn_rehead.bai'
+           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai'
            '|',
            'md5sum',
            '-',
-           '> '+args.gdc_id+'_md5.txt',
+           '> '+str(args.gdc_id)+'_md5.txt',
            'aws',
            '--profile',
            'cleversafe',
@@ -44,7 +44,7 @@ def main(args):
            'http://gdc-accessors.osdc.io',
            's3',
            'cp',
-           '- '+args.output_location]
+           '- '+str(args.output_location)]
     shell_cmd = ' '.join(cmd)
     print shell_cmd
 
