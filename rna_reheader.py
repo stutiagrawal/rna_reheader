@@ -1,6 +1,6 @@
 import os
 import sys
-import hashlib
+import argparse
 
 def main(args):
     del os.environ['https_proxy']
