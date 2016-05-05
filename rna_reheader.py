@@ -32,19 +32,19 @@ def main(args):
            '-Xmx2G '+str(args.picard),
            'ValidateSamFile',
            'I=/dev/stdin',
-           'O='+str(args.gdc_id)+'.validate)',
+           'O='+str(args.gdc_id)+'.validate',
+           '> '+str(args.gdc_id)+'.validate.log)',
            '>(java',
            '-jar',
            '-Xmx2G '+str(args.picard),
            'BuildBamIndex',
            'I=/dev/stdin',
-           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai)',
+           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai',
+           '> '+str(args.gdc_id)+'.buildbamindex.log)',
            '>(md5sum',
            '-',
            '> '+str(args.gdc_id)+'_md5.txt)',
-           '>/dev/null',
-           '|',
-           '> '+str(args.gdc_id)+'.log']
+           '>/dev/null']
     shell_cmd = ' '.join(cmd)
     subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
     outdir = os.path.dirname(args.output_location)
