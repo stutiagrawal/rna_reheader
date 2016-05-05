@@ -101,7 +101,7 @@ def get_case(engine, status_table):
                     row.aliquot_barcode,
                     row.input_location,
                     row.output_location]
-            count += 1
+        count += 1
 
     return s
 
@@ -133,6 +133,6 @@ def get_all_inputs(engine, inputs_table):
                     row.aliquot_barcode,
                     row.input_location,
                     row.output_location]
-            count += 1
+        count += 1
 
     return s
