@@ -41,7 +41,8 @@ def main(args):
            'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai)',
            '>(md5sum',
            '-',
-           '> '+str(args.gdc_id)+'_md5.txt)']
+           '> '+str(args.gdc_id)+'_md5.txt)',
+           '>/dev/null']
     shell_cmd = ' '.join(cmd)
     subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
     outdir = os.path.dirname(args.output_location)
