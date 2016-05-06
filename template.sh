@@ -29,4 +29,4 @@ $rna_reheader \
 
 trap cleanup EXIT
 
-aws --profile cleversafe --endpoint http://gdc-accessors.osdc.io s3 cp $wkdir $outputdir_location
+aws --profile cleversafe --endpoint http://gdc-accessors.osdc.io s3 cp $wkdir $outputdir_location --recursive
