@@ -32,6 +32,7 @@ def main(args):
            '-Xmx2G '+str(args.picard),
            'ValidateSamFile',
            'I=/dev/stdin',
+           'VALIDATION_STRINGENCY=LENIENT',
            'O='+str(args.gdc_id)+'.validate',
            '2> '+str(args.gdc_id)+'.validate.log)',
            '>(java',
