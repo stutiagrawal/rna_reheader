@@ -1,4 +1,4 @@
-import postgres
+import status_postgres
 import argparse
 import os
 
@@ -55,6 +55,9 @@ if __name__ == "__main__":
 
             if "XX_OPL_XX" in line:
                 line = line.replace("XX_OPL_XX", str(cases[case][3]))
+
+            if "XX_OPD_XX" in line:
+                line = line.replace("XX_OPD_XX", os.path.dirname(str(cases[case][3])))
 
             if "XX_GDC_XX" in line:
                 line = line.replace("XX_GDC_XX", str(cases[case][0]))
