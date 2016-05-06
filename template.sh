@@ -14,6 +14,7 @@ picard="/mnt/tools/picard-tools/picard.jar"
 fixit="/mnt/fix_it.py"
 rna_reheader="/mnt/rna_reheader/rna_reheader.py"
 wkdir=`sudo mktemp -d rh.XXXXXXXXXX -p /mnt/SCRATCH/`
+sudo chown ubuntu:ubuntu $wkdir
 
 cd $wkdir
 
