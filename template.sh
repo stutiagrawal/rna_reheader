@@ -5,8 +5,8 @@ function cleanup (){
     sudo rm -rf $wkdir;
 }
 
-unset $http_proxy
-unset $https_proxy
+unset http_proxy
+unset https_proxy
 
 input_location="XX_INL_XX"
 output_location="XX_OPL_XX"
