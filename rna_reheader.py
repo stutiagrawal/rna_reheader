@@ -47,17 +47,6 @@ def main(args):
            '>/dev/null']
     shell_cmd = ' '.join(cmd)
     subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
-    outdir = os.path.dirname(args.output_location)
-    upload = ['aws',
-              '--profile',
-              'cleversafe',
-              '--endpoint',
-              'http://gdc-accessors.osdc.io',
-              's3',
-              'cp '+str(args.gdc_id)+'* '+outdir,
-              '--recursive']
-    shell_upload = ' '.join(upload)
-    subprocess.call(shell_upload, shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
