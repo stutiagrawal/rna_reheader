@@ -24,6 +24,7 @@ def main(args):
            'FixMateInformation',
            'I=/dev/stdin',
            'O=/dev/stdout',
+           '2> '+str(args.gdc_id)+'.fixmateinfo.log)',
            '|',
            'tee',
            '>(aws',
