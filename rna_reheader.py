@@ -4,7 +4,10 @@ import argparse
 import subprocess
 
 def main(args):
-    cmd = ['aws',
+    step_dir = os.getcwd()
+    base_name = os.path.basename(args.output_location)
+    fixed_bam = os.path.join(step_dir, base_name)
+    cmd1 = ['aws',
            '--profile',
            'cleversafe',
            '--endpoint',
@@ -12,53 +15,58 @@ def main(args):
            's3',
            'cp '+str(args.input_location),
            '-',
-           '| '+str(args.fixit),
-           '--sm '+str(args.barcode),
+           '|',
+           str(args.fixit),
+           '--sm',
+           str(args.barcode),
            '--pl',
            'ILLUMINA',
-           '-',
-           '|',
+           '>',
+           fixed_bam]
+    shell_cmd1 = ' '.join(cmd1)
+    subprocess.call(shell_cmd1, shell=True, executable='/bin/bash')
+
+    cmd2 = ['docker',
+           'run',
+           '-i',
+           '-v',
+           step_dir+':'+step_dir,
+           '-v',
+           '/mnt/SCRATCH/:/tmp',
+           str(args.picard),
            'java',
            '-jar',
-           '-Djava.io.tmpdir=/mnt/tmp/job_tmp',
-           '-Xmx2G '+str(args.picard),
-           'FixMateInformation',
-           'I=/dev/stdin',
-           'O=/dev/stdout',
-           '2> '+str(args.gdc_id)+'.fixmateinfo.log',
-           '|',
-           'tee',
-           '>(aws',
-           '--profile',
-           'cleversafe',
-           '--endpoint',
-           'http://gdc-accessors.osdc.io',
-           's3',
-           'cp',
-           '- '+str(args.output_location)+')',
-           '>(java',
-           '-jar',
-           '-Djava.io.tmpdir=/mnt/tmp/job_tmp',
-           '-Xmx2G '+str(args.picard),
+           '-Xmx4G',
+           '-Djava.io.tmpdir=/tmp/job_tmp',
+           'tools/picard-tools/picard.jar',
            'ValidateSamFile',
-           'I=/dev/stdin',
+           'I='+fixed_bam,
            'VALIDATION_STRINGENCY=LENIENT',
-           'O='+str(args.gdc_id)+'.validate',
-           '2> '+str(args.gdc_id)+'.validate.log)',
-           '>(java',
+           'O='+os.path.join(step_dir, str(args.gdc_id))+'.validate',
+           '2> '+os.path.join(step_dir, str(args.gdc_id))+'.validate.log']
+    shell_cmd2 = ' '.join(cmd2)
+    subprocess.call(shell_cmd2, shell=True, executable='/bin/bash')
+
+    cmd3 = ['docker',
+           'run',
+           '-i',
+           '-v',
+           step_dir+':'+step_dir,
+           '-v',
+           '/mnt/SCRATCH/:/tmp',
+           str(args.picard),
+           'java',
            '-jar',
-           '-Djava.io.tmpdir=/mnt/tmp/job_tmp',
-           '-Xmx2G '+str(args.picard),
+           '-Xmx4G',
+           '-Djava.io.tmpdir=/tmp/job_tmp',
+           'tools/picard-tools/picard.jar',
            'BuildBamIndex',
-           'I=/dev/stdin',
-           'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai',
-           '2> '+str(args.gdc_id)+'.buildbamindex.log)',
-           '>(md5sum',
-           '-',
-           '> '+str(args.gdc_id)+'_md5.txt)',
-           '>/dev/null']
-    shell_cmd = ' '.join(cmd)
-    subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
+           'I='+fixed_bam,
+           'VALIDATION_STRINGENCY=LENIENT',
+           'O='+os.path.join(step_dir, str(args.gdc_id))+'_gdc_realn_rehead.bai',
+           '2> '+os.path.join(step_dir, str(args.gdc_id))+'.buildbamindex.log']
+    shell_cmd3 = ' '.join(cmd3)
+    subprocess.call(shell_cmd3, shell=True, executable='/bin/bash')    
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -81,7 +89,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('--picard',
         required=True,
-        help='picard jar file path',
+        help='picard docker',
     )
     parser.add_argument('--fixit',
         required=True,
