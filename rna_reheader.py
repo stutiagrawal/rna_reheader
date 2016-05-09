@@ -69,6 +69,12 @@ def main(args):
     shell_cmd3 = ' '.join(cmd3)
     subprocess.call(shell_cmd3, shell=True, executable='/bin/bash')
 
+    cmd4 =['md5sum',
+           fixed_bam,
+           '> '+str(args.gdc_id)+'_md5.txt']
+    shell_cmd4 = ' '.join(cmd4)
+    subprocess.call(shell_cmd4, shell=True, executable='/bin/bash')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
