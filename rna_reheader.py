@@ -21,6 +21,7 @@ def main(args):
            str(args.barcode),
            '--pl',
            'ILLUMINA',
+           '-',
            '>',
            fixed_bam]
     shell_cmd1 = ' '.join(cmd1)
@@ -66,7 +67,7 @@ def main(args):
            'O='+os.path.join(step_dir, str(args.gdc_id))+'_gdc_realn_rehead.bai',
            '2> '+os.path.join(step_dir, str(args.gdc_id))+'.buildbamindex.log']
     shell_cmd3 = ' '.join(cmd3)
-    subprocess.call(shell_cmd3, shell=True, executable='/bin/bash')    
+    subprocess.call(shell_cmd3, shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
