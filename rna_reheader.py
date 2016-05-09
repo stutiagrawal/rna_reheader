@@ -7,7 +7,7 @@ def main(args):
     step_dir = os.getcwd()
     base_name = os.path.basename(args.output_location)
     fixed_bam = os.path.join(step_dir, base_name)
-    cmd1 = ['aws',
+    cmd1 = ['/home/ubuntu/.virtualenvs/p2/bin/aws',
            '--profile',
            'cleversafe',
            '--endpoint',
