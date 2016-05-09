@@ -18,6 +18,13 @@ def main(args):
            'ILLUMINA',
            '-',
            '|',
+           'java',
+           '-jar',
+           '-Xmx2G '+str(args.picard),
+           'FixMateInformation',
+           'I=/dev/stdin',
+           'O=/dev/stdout'
+           '|',
            'tee',
            '>(aws',
            '--profile',
