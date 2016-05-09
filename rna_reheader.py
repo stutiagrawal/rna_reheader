@@ -16,6 +16,7 @@ def main(args):
            'cp '+str(args.input_location),
            '-',
            '|',
+           '/home/ubuntu/.virtualenvs/p2/bin/python',
            str(args.fixit),
            '--sm',
            str(args.barcode),
