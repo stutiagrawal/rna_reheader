@@ -4,7 +4,10 @@ import argparse
 import subprocess
 
 def main(args):
-    cmd = ['aws',
+    step_dir = os.getcwd()
+    base_name = os.path.basename(args.output_location)
+    fixed_bam = os.path.join(step_dir, base_name)
+    cmd1 = ['aws',
            '--profile',
            'cleversafe',
            '--endpoint',
@@ -23,39 +26,33 @@ def main(args):
            '-Xmx2G '+str(args.picard),
            'FixMateInformation',
            'I=/dev/stdin',
-           'O=/dev/stdout',
-           '2> '+str(args.gdc_id)+'.fixmateinfo.log',
-           '|',
-           'tee',
-           '>(aws',
-           '--profile',
-           'cleversafe',
-           '--endpoint',
-           'http://gdc-accessors.osdc.io',
-           's3',
-           'cp',
-           '- '+str(args.output_location)+')',
-           '>(java',
+           'O='+fixed_bam,
+           '2> '+str(args.gdc_id)+'.fixmateinfo.log']
+    cmd2 = ['java',
            '-jar',
            '-Xmx2G '+str(args.picard),
            'ValidateSamFile',
-           'I=/dev/stdin',
+           'I='+fixed_bam,
            'VALIDATION_STRINGENCY=LENIENT',
            'O='+str(args.gdc_id)+'.validate',
-           '2> '+str(args.gdc_id)+'.validate.log)',
-           '>(java',
+           '2> '+str(args.gdc_id)+'.validate.log',
+           '|',
+           'java',
            '-jar',
            '-Xmx2G '+str(args.picard),
            'BuildBamIndex',
-           'I=/dev/stdin',
+           'I='fixed_bam,
            'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai',
-           '2> '+str(args.gdc_id)+'.buildbamindex.log)',
-           '>(md5sum',
-           '-',
-           '> '+str(args.gdc_id)+'_md5.txt)',
+           '2> '+str(args.gdc_id)+'.buildbamindex.log',
+           '|',
+           'md5sum',
+           fixed_bam,
+           '> '+str(args.gdc_id)+'_md5.txt',
            '>/dev/null']
-    shell_cmd = ' '.join(cmd)
-    subprocess.call(shell_cmd, shell=True, executable='/bin/bash')
+    shell_cmd1 = ' '.join(cmd1)
+    subprocess.call(shell_cmd1, shell=True, executable='/bin/bash')
+    shell_cmd2 = ' '.join(cmd2)
+    subprocess.call(shell_cmd2, shell=True, executable='/bin/bash')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
