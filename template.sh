@@ -1,4 +1,8 @@
 #!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=20
+#SBATCH --ntasks=1
+#SBATCH --workdir="/mnt/SCRATCH/"
 
 function cleanup (){
     echo "cleanup tmp data";
