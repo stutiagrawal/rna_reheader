@@ -22,7 +22,7 @@ sudo chown ubuntu:ubuntu $wkdir
 
 cd $wkdir
 
-python \
+/home/ubuntu/.virtualenvs/p2/bin/python \
 $rna_reheader \
 --input_location $input_location \
 --output_location $output_location \
