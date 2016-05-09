@@ -23,7 +23,7 @@ def main(args):
            '-Xmx2G '+str(args.picard),
            'FixMateInformation',
            'I=/dev/stdin',
-           'O=/dev/stdout'
+           'O=/dev/stdout',
            '|',
            'tee',
            '>(aws',
