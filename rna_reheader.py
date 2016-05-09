@@ -41,7 +41,7 @@ def main(args):
            '-jar',
            '-Xmx2G '+str(args.picard),
            'BuildBamIndex',
-           'I='fixed_bam,
+           'I='+fixed_bam,
            'O='+str(args.gdc_id)+'_gdc_realn_rehead.bai',
            '2> '+str(args.gdc_id)+'.buildbamindex.log',
            '|',
